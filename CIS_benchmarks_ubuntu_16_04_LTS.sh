@@ -3663,6 +3663,12 @@ ensure_password_creation_requirements_are_configured () {
 		Edit the /etc/pam.d/common-passwd file to include the appropriate options for pam_pwquality.so and to conform to site policy:
 		password requisite pam_pwquality.so try_first_pass retry=3
 		Edit /etc/security/pwquality.conf to add or update the following settings to conform to site policy:
+		minlen=14
+		dcredit=-1
+		ucredit=-1
+		ocredit=-1
+		lcredit=-1\n
+
 		Notes:
 		Additional module options may be set, recommendation only covers those listed here. \n"
 	fi
