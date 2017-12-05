@@ -4202,7 +4202,7 @@ ensure_no_world_writable_files_exist () {
                 else
                 echo -e "\e[31mFailed!\e[0m : \n                Audit:
 		Run the following command and verify no files are returned:
-		# df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type f -perm -0002\n
+		# df --local -P | awk {'if (NR!=1) print \$6'} | xargs -I '{}' find '{}' -xdev -type f -perm -0002\n
 
 		The command above only searches local filesystems, there may still be compromised items on network mounted partitions. Additionally the --local option to df is not universal to all versions, it can be omitted to search all filesystems on a system including network mounted filesystems or the following command can be run manually for each partition:
 		# find <partition> -xdev -type f -perm -0002\n
@@ -4220,7 +4220,7 @@ ensure_no_unowned_files_or_directories_exist () {
                 else
                 echo -e "\e[31mFailed!\e[0m : \n                Audit:
 		Run the following command and verify no files are returned:
-		# df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -nouser\n
+		# df --local -P | awk {'if (NR!=1) print \$6'} | xargs -I '{}' find '{}' -xdev -nouser\n
 
 		The command above only searches local filesystems, there may still be compromised items on network mounted partitions. Additionally the --local option to df is not universal to all versions, it can be omitted to search all filesystems on a system including network mounted filesystems or the following command can be run manually for each partition:
 		# find <partition> -xdev -nouser\n
@@ -4276,7 +4276,7 @@ audit_sgid_executables () {
                 echo -e "\n======\e[0m\n"
                 echo -e "               Audit:
 		Run the following command to list SGID files:
-		# df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type f -perm -2000\n
+		# df --local -P | awk {'if (NR!=1) print \$6'} | xargs -I '{}' find '{}' -xdev -type f -perm -2000\n
 
 		The command above only searches local filesystems, there may still be compromised items on network mounted partitions. Additionally the --local option to df is not universal to all versions, it can be omitted to search all filesystems on a system including network mounted filesystems or the following command can be run manually for each partition:
 		# find <partition> -xdev -type f -perm -2000\n
@@ -4359,7 +4359,7 @@ ensure_root_is_the_only_uid_0_account () {
                 else
                 echo -e "\e[31mFailed!\e[0m : \n                Audit:
 		Run the following command and verify that only \"root\" is returned:
-		# cat /etc/passwd | awk -F: '($3 == 0) { print $1 }'
+		# cat /etc/passwd | awk -F: '(\$3 == 0) { print \$1 }'
 		root\n
 
 		Remediation:
@@ -4421,7 +4421,7 @@ fi
 if [ \"\`echo $PATH | grep :$\`\"  != \"\" ]; then
   echo \"Trailing : in PATH\"
 fi
-p=\`echo $PATH | sed -e 's/::/:/' -e 's/:$//' -e 's/:/ /g'\`
+p=\`echo \$PATH | sed -e 's/::/:/' -e 's/:$//' -e 's/:/ /g'\`
 set -- $p
 while [ \"\$1\" != \"\" ]; do
   if [ \"\$1\" = \".\" ]; then
@@ -4431,13 +4431,13 @@ while [ \"\$1\" != \"\" ]; do
   fi
   if [ -d \$1 ]; then
     dirperm=\`ls -ldH \$1 | cut -f1 -d\" \"\`
-    if [ \`echo $dirperm | cut -c6 \` != \"-\" ]; then
+    if [ \`echo \$dirperm | cut -c6 \` != \"-\" ]; then
       echo \"Group Write permission set on directory \$1\"
     fi
     if [ \`echo \$dirperm | cut -c9 \` != \"-\" ]; then
       echo \"Other Write permission set on directory \$1\"
     fi
-    dirown=\`ls -ldH $1 | awk '{print $3}'\`
+    dirown=\`ls -ldH \$1 | awk '{print \$3}'\`
     if [ \"$dirown\" != \"root\" ] ; then
       echo \$1 is not owned by root
     fi
@@ -4513,7 +4513,7 @@ $output
 
 #!/bin/bash
 for dir in \`cat /etc/passwd  | egrep -v '(root|halt|sync|shutdown)' | awk -F: '($7 != \"/usr/sbin/nologin\") { print $6 }'\`; do
-  dirperm=`ls -ld $dir | cut -f1 -d" "`
+  dirperm=`ls -ld \$dir | cut -f1 -d" "`
   if [ \`echo \$dirperm | cut -c6 \` != \"-\" ]; then
     echo \"Group Write permission set on directory \$dir\"
   fi
@@ -4557,7 +4557,7 @@ $output
 #!/bin/bash
 cat /etc/passwd | awk -F: '{ print \$1 \" \" \$3 \" \" \$6 }' | while read user uid dir; do
  if [ \$uid -ge 1000 -a -d \"\$dir\" -a \$user != \"nfsnobody\" ]; then
- owner=\$(stat -L -c \"%U\" \"$dir\")
+ owner=\$(stat -L -c \"%U\" \"\$dir\")
  if [ \"\$owner\" != \"\$user\" ]; then
  echo \"The home directory (\$dir) of user \$user is owned by \$owner.\"\n
 
@@ -4600,13 +4600,13 @@ $output
 #!/bin/bash
 for dir in \`cat /etc/passwd | egrep -v '(root|sync|halt|shutdown)' | awk -F: '($7 != "/usr/sbin/nologin") { print $6 }'\`; do
   for file in \$dir/.[A-Za-z0-9]*; do
-    if [ ! -h \"\$file\" -a -f \"$file\" ]; then
+    if [ ! -h \"\$file\" -a -f \"\$file\" ]; then
       fileperm=\`ls -ld \$file | cut -f1 -d\" \"\`
       if [ \`echo \$fileperm | cut -c6 \` != \"-\" ]; then
-        echo \"Group Write permission set on file $file\"
+        echo \"Group Write permission set on file \$file\"
 fi
 if [ \`echo \$fileperm | cut -c9 \` != \"-\" ]; then
-        echo \"Other Write permission set on file $file\"
+        echo \"Other Write permission set on file \$file\"
 fi
 fi
 done
@@ -4676,7 +4676,7 @@ $output
 #!/bin/bash
 for dir in \`cat /etc/passwd |\
   awk -F: '{ print \$6 }'\`; do
-  if [ ! -h \"$dir/.netrc\" -a -f \"\$dir/.netrc\" ]; then
+  if [ ! -h \"\$dir/.netrc\" -a -f \"\$dir/.netrc\" ]; then
     echo \".netrc file \$dir/.netrc exists\"
   fi
 done
@@ -4728,23 +4728,23 @@ $output
 for dir in \`cat /etc/passwd | egrep -v '(root|sync|halt|shutdown)' | awk -F: '(\$7 != \"/usr/sbin/nologin\") { print \$6 }'\`; do
   for file in \$dir/.netrc; do
     if [ ! -h \"\$file\" -a -f \"\$file\" ]; then
-      fileperm=\`ls -ld $file | cut -f1 -d\" \"\`
-      if [ \`echo $fileperm | cut -c5 \` != \"-\" ]; then
+      fileperm=\`ls -ld \$file | cut -f1 -d\" \"\`
+      if [ \`echo \$fileperm | cut -c5 \` != \"-\" ]; then
         echo \"Group Read set on \$file\"
 fi
-      if [ \`echo $fileperm | cut -c6 \` != \"-\" ]; then
+      if [ \`echo \$fileperm | cut -c6 \` != \"-\" ]; then
         echo \"Group Write set on \$file\"
       fi
-      if [ \`echo $fileperm | cut -c7 \` != \"-\" ]; then
-        echo "Group Execute set on $file"
+      if [ \`echo \$fileperm | cut -c7 \` != \"-\" ]; then
+        echo "Group Execute set on \$file"
       fi
-      if [ \`echo $fileperm | cut -c8 \` != \"-\" ]; then
-        echo "Other Read  set on $file"
+      if [ \`echo \$fileperm | cut -c8 \` != \"-\" ]; then
+        echo "Other Read  set on \$file"
       fi
-      if [ \`echo $fileperm | cut -c9 \` != \"-\" ]; then
-        echo "Other Write set on $file"
+      if [ \`echo \$fileperm | cut -c9 \` != \"-\" ]; then
+        echo "Other Write set on \$file"
       fi
-      if [ \`echo $fileperm | cut -c10 \` != \"-\" ]; then
+      if [ \`echo \$fileperm | cut -c10 \` != \"-\" ]; then
         echo \"Other Execute set on \$file\"
       fi
 fi done
@@ -4815,9 +4815,9 @@ $output
 		Run the following script and verify no results are returned:
 		#!/bin/bash
 		for i in \$(cut -s -d: -f4 /etc/passwd | sort -u ); do
-			  grep -q -P \"^.*?:[^:]*:$i:\" /etc/group
+			  grep -q -P \"^.*?:[^:]*:\$i:\" /etc/group
 			    if [ \$? -ne 0 ]; then
-				        echo \"Group $i is referenced by /etc/passwd but does not exist in /etc/group\"
+				        echo \"Group \$i is referenced by /etc/passwd but does not exist in /etc/group\"
 					  fi
 				  done
 
@@ -4987,7 +4987,7 @@ ensure_shadow_group_is_empty () {
                 echo -e "\e[31mFailed!\e[0m : \n                Audit:
 		Run the following commands and verify no results are returned:
 		# grep ^shadow:[^:]*:[^:]*:[^:]+ /etc/group
-		# awk -F: '($4 == "<shadow-gid>") { print }' /etc/passwd
+		# awk -F: '(\$4 == \"<shadow-gid>\") { print }' /etc/passwd
 
 		Remediation:
 		Remove all users from the shadow group, and change the primary group of any users with shadow as their primary group.	\n"
