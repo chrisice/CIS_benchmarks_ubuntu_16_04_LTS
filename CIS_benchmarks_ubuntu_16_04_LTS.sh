@@ -3737,7 +3737,7 @@ ensure_password_hashing_algorithm_is_sha_512 () {
 
 ensure_password_expiration_is_90_days_or_less () {
 		echo -e "\e[92m== 5.4.1.1 Ensure password expiration is 90 days or less ==\n"
-		if [[ "$(grep -oP "(?<=^PASS_MAX_DAYS\s).+$" /etc/login.defs 2>/dev/nul)" -lt 91 ]]
+		if [[ "$(grep -oP "(?<=^PASS_MAX_DAYS\s).+$" /etc/login.defs 2>/dev/null)" -lt 91 ]]
                 then echo -e "Passed!\n"
                 else
                 echo -e "\e[31mFailed!\e[0m : \n                Audit:
