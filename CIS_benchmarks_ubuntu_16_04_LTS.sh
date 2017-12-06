@@ -3235,7 +3235,7 @@ ensure_cron_daemon_is_enabled () {
 
 ensure_permissions_on_etc_crontab_are_configured () {
 		echo -e "\e[92m== 5.1.2 Ensure permissions on /etc/crontab are configured ==\n"
-		if [[ "$(stat -c %a /etc/crontab 2>/dev/null)" = "600" && "$(stat -c %U:%G /etc/crontab 2>/dev/null)" = "root:root" ]]
+		if [[ "$(stat -c %a /etc/crontab 2>/dev/null)" = "600" || "$(stat -c %a /etc/crontab 2>/dev/null)" = "700" && "$(stat -c %U:%G /etc/crontab 2>/dev/null)" = "root:root" ]]
                 then echo -e "Passed!\n"
                 else
                 echo -e "\e[31mFailed!\e[0m : \n                Audit:
@@ -3253,7 +3253,7 @@ ensure_permissions_on_etc_crontab_are_configured () {
 
 ensure_permissions_on_etc_cron_hourly_are_configured () {
 		echo -e "\e[92m== 5.1.3 Ensure permissions on /etc/cron.hourly are configured ==\n"
-                if [[ "$(stat -c %a /etc/cron.hourly 2>/dev/null)" = "600" && "$(stat -c %U:%G /etc/cron.hourly 2>/dev/null)" = "root:root" ]]
+		if [[ "$(stat -c %a /etc/cron.hourly 2>/dev/null)" = "600" || "$(stat -c %a /etc/cron.hourly 2>/dev/null)" = "700" && "$(stat -c %U:%G /etc/cron.hourly 2>/dev/null)" = "root:root" ]]
                 then echo -e "Passed!\n"
                 else
                 echo -e "\e[31mFailed!\e[0m : \n                Audit:
@@ -3271,7 +3271,7 @@ ensure_permissions_on_etc_cron_hourly_are_configured () {
 
 ensure_permissions_on_etc_cron_daily_are_configured () {
                 echo -e "\e[92m== 5.1.4 Ensure permissions on /etc/cron.daily are configured ==\n"
-                if [[ "$(stat -c %a /etc/cron.daily 2>/dev/null)" = "600" && "$(stat -c %U:%G /etc/cron.daily 2>/dev/null)" = "root:root" ]]
+		if [[ "$(stat -c %a /etc/cron.daily 2>/dev/null)" = "600" || "$(stat -c %a /etc/cron.daily 2>/dev/null)" = "700" && "$(stat -c %U:%G /etc/cron.daily 2>/dev/null)" = "root:root" ]]
                 then echo -e "Passed!\n"
                 else
                 echo -e "\e[31mFailed!\e[0m : \n                Audit:
@@ -3289,7 +3289,7 @@ ensure_permissions_on_etc_cron_daily_are_configured () {
 
 ensure_permissions_on_etc_cron_weekly_are_configured () {
                 echo -e "\e[92m== 5.1.5 Ensure permissions on /etc/cron.weekly are configured ==\n"
-                if [[ "$(stat -c %a /etc/cron.weekly 2>/dev/null)" = "600" && "$(stat -c %U:%G /etc/cron.weekly 2>/dev/null)" = "root:root" ]]
+		if [[ "$(stat -c %a /etc/cron.weekly 2>/dev/null)" = "600" || "$(stat -c %a /etc/cron.weekly 2>/dev/null)" = "700" && "$(stat -c %U:%G /etc/cron.weekly 2>/dev/null)" = "root:root" ]]
                 then echo -e "Passed!\n"
                 else
                 echo -e "\e[31mFailed!\e[0m : \n                Audit:
@@ -3307,7 +3307,7 @@ ensure_permissions_on_etc_cron_weekly_are_configured () {
 
 ensure_permissions_on_etc_cron_monthly_are_configured () {
                 echo -e "\e[92m== 5.1.6 Ensure permissions on /etc/cron.monthly are configured ==\n"
-                if [[ "$(stat -c %a /etc/cron.monthly 2>/dev/null)" = "600" && "$(stat -c %U:%G /etc/cron.monthly 2>/dev/null)" = "root:root" ]]
+		if [[ "$(stat -c %a /etc/cron.monthly 2>/dev/null)" = "600" || "$(stat -c %a /etc/cron.monthly 2>/dev/null)" = "700" && "$(stat -c %U:%G /etc/cron.monthly 2>/dev/null)" = "root:root" ]]
                 then echo -e "Passed!\n"
                 else
                 echo -e "\e[31mFailed!\e[0m : \n                Audit:
@@ -3325,7 +3325,7 @@ ensure_permissions_on_etc_cron_monthly_are_configured () {
 
 ensure_permissions_on_etc_cron_d_are_configured () {
                 echo -e "\e[92m== 5.1.7 Ensure permissions on /etc/cron.d are configured ==\n"
-                if [[ "$(stat -c %a /etc/cron.d 2>/dev/null)" = "600" && "$(stat -c %U:%G /etc/cron.d 2>/dev/null)" = "root:root" ]]
+		if [[ "$(stat -c %a /etc/cron.d 2>/dev/null)" = "600" || "$(stat -c %a /etc/cron.d 2>/dev/null)" = "700" && "$(stat -c %U:%G /etc/cron.d 2>/dev/null)" = "root:root" ]]
                 then echo -e "Passed!\n"
                 else
                 echo -e "\e[31mFailed!\e[0m : \n                Audit:
@@ -3343,7 +3343,7 @@ ensure_permissions_on_etc_cron_d_are_configured () {
 
 ensure_at_cron_is_restricted_to_authorized_users () {
                 echo -e "\e[92m== 5.1.8 Ensure at/cron is restricted to authorized users  ==\n"
-		if [[ ! -f /etc/cron.deny && ! -f /etc/at.deny && "$(stat -c %a /etc/at.allow 2>/dev/null)" = "600" && "$(stat -c %U:%G /etc/at.allow 2>/dev/null)" = "root:root" && "$(stat -c %a /etc/cron.allow 2>/dev/null)" = "600" && "$(stat -c %U:%G /etc/cron.allow 2>/dev/null)" = "root:root" ]]
+		if [[ ! -f /etc/cron.deny && ! -f /etc/at.deny && "$(stat -c %a /etc/at.allow 2>/dev/null)" = "600" || "$(stat -c %a /etc/at.allow 2>/dev/null)" = "700" && "$(stat -c %U:%G /etc/at.allow 2>/dev/null)" = "root:root" && "$(stat -c %a /etc/cron.allow 2>/dev/null)" = "600" || "$(stat -c %a /etc/cron.allow 2>/dev/null)" = "700" && "$(stat -c %U:%G /etc/cron.allow 2>/dev/null)" = "root:root" ]]
                 then echo -e "Passed!\n"
                 else
                 echo -e "\e[31mFailed!\e[0m : \n                Audit:
