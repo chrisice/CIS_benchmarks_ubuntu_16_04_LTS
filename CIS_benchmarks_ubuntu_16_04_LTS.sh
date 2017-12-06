@@ -4253,7 +4253,7 @@ ensure_no_ungrouped_files_or_directories_exist () {
 audit_suid_executables () {
 		echo -e "\e[92m== 6.1.13 Audit SUID executables (Not Scored) ==\n"
 		echo -e "\e[0mVerify that only the files that should have SUID permissions are listed below:\n"
-		echo -e "\e[31m=== df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type f -perm -4000 ===\n"
+		echo -e "\e[31m=== df --local -P | awk {'if (NR!=1) print \$6'} | xargs -I '{}' find '{}' -xdev -type f -perm -4000 ===\n"
 		df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type f -perm -4000 2>/dev/null
 		echo -e "\n======\e[0m\n"
 		echo -e "		Audit:
@@ -4272,7 +4272,7 @@ audit_suid_executables () {
 audit_sgid_executables () {
 		echo -e "\e[92m== 6.1.14 Audit SGID executables ==\n"
 		echo -e "\e[0mVerify that only the files that should have SGID permissions are listed below:\n"
-		echo -e "\e[31m=== df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type f -perm -2000 ===\n"
+		echo -e "\e[31m=== df --local -P | awk {'if (NR!=1) print \$6'} | xargs -I '{}' find '{}' -xdev -type f -perm -2000 ===\n"
 		df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type f -perm -2000 2>/dev/null
                 echo -e "\n======\e[0m\n"
                 echo -e "               Audit:
