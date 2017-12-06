@@ -2850,7 +2850,8 @@ ensure_system_administrator_actions_sudolog_are_collected () {
 		-w /var/log/sudo.log -p wa -k actions\n
 
 		Remediation:
-		Add the following lines to the /etc/audit/audit.rules file: -w /var/log/sudo.log -p wa -k actions\n
+		Add the following lines to the /etc/audit/audit.rules file: \n
+		-w /var/log/sudo.log -p wa -k actions\n
 
 		Notes:
 		The system must be configured with su disabled (See Item 5.6 Ensure access to the su command is restricted) to force all command execution through sudo. This will not be effective on the console, as administrators can log in as root.\n"
