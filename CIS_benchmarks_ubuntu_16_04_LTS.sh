@@ -2,7 +2,7 @@
 
 disable_cramfs () {
 	echo -e "\e[92m== 1.1.1.1 Ensure mounting of cramfs filesystems is disabled ==\e\n"
-        if [[ "$(grep cramfs /etc/modprobe.d/CIS.conf 2>/dev/null)" = *install* ]]
+	if [[ "$(modprobe -n -v cramfs 2>/dev/null)" = *install* ]]
 		then echo "Passed!"
 	else
 		echo -e "\e[31mFailed!\e[0m : \nVerify output of 'modprobe -n -v cramfs' command.  Should show this output: \n
