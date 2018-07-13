@@ -2,7 +2,7 @@
 
 disable_cramfs () {
 	echo -e "\e[92m== 1.1.1.1 Ensure mounting of cramfs filesystems is disabled ==\e\n"
-	if [[ "$(modprobe -n -v cramfs 2>/dev/null)" = *install* ]]
+        if [[ "$(grep cramfs /etc/modprobe.d/CIS.conf 2>/dev/null)" = *install* ]]
 		then echo "Passed!"
 	else
 		echo -e "\e[31mFailed!\e[0m : \nVerify output of 'modprobe -n -v cramfs' command.  Should show this output: \n
@@ -112,7 +112,7 @@ disable_hfsplus () {
 
 disable_squashfs () {
         echo -e "\e[92m== 1.1.1.6 Ensure mounting of squashfs filesystems is disabled ==\e\n"
-        if [[ "$(modprobe -n -v squashfs 2>/dev/null)" = *install* ]]
+        if [[ "$(grep squashfs /etc/modprobe.d/CIS.conf 2>/dev/null)" = *install* ]]
                 then echo "Passed!"
         else
                 echo -e "\e[31mFailed!\e[0m : \nVerify output of 'modprobe -n -v squashfs' command.  Should show this output: \n
@@ -156,7 +156,7 @@ disable_udf () {
 
 disable_fat () {
         echo -e "\e[92m== 1.1.1.8 Ensure mounting of fat filesystems is disabled ==\e\n"
-        if [[ "$(modprobe -n -v vfat 2>/dev/null)" = *install* ]]
+        if [[ "$(grep vfat /etc/modprobe.d/CIS.conf 2>/dev/null)" = *install* ]]
                 then echo "Passed!"
         else
                 echo -e "\e[31mFailed!\e[0m : \nVerify output of 'modprobe -n -v vfat' command.  Should show this output: \n
