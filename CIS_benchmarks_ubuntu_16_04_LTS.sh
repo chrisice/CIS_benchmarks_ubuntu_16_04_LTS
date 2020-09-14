@@ -3181,7 +3181,7 @@ ensure_rsyslog_or_syslog_ng_is_installed () {
 
 ensure_permissions_on_all_logfiles_are_configured () {
 		echo -e "\e[92m== 4.2.4 Ensure permissions on all logfiles are configured ==\n"
-		if [[ "$(find /var/log/ -type f -perm /o+x 2>/dev/null)" = "" ]]
+		if [[ "$(find /var/log/ -type f -perm /o+r+w+x 2>/dev/null)" = "" && "$(find /var/log/ -type f -perm /g+w+x 2>/dev/null)" = "" ]]
                 then echo -e "Passed!\n"
                 else
                 echo -e "\e[31mFailed!\e[0m : \n                Audit:
@@ -4457,11 +4457,11 @@ fi
 
 ensure_all_users_home_directories_exist () {
 		echo -e "\e[92m== 6.2.7 Ensure all users' home directories exist ==\n"
-		output=$(cat /etc/passwd | awk -F: '{ print $1 " " $3 " " $6 }' | while read user uid dir; do
-  		if [ $uid -ge 1000 -a ! -d "$dir" -a $user != "nfsnobody" ]; then
-    		echo "The home directory ($dir) of user $user does not exist."
-  	fi
-done)
+        output=$(cat /etc/passwd | egrep -v '^(root|halt|sync|shutdown)' | awk -F: '($7 != "/usr/sbin/nologin" && $7 != "/bin/false") { print $1 " " $6 }' | while read user dir; do
+            if [ ! -d "$dir" ]; then
+                echo "The home directory ($dir) of user $user does not exist."
+            fi
+        done)
 
 		if [[ $output = "" ]]
                                 then echo -e "Passed!\n"
